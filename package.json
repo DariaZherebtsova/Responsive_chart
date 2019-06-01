@@ -19,11 +19,14 @@
   },
   "homepage": "https://github.com/DariaZherebtsova/Responsive_chart#readme",
   "dependencies": {
-    "d3.js": "0.0.2-security",
+    "d3": "^5.9.2",
+    "express": "^4.17.1",
     "jquery": "^3.4.1",
     "webpack": "^4.32.2"
   },
   "devDependencies": {
+    "css-loader": "^2.1.1",
+    "style-loader": "^0.23.1",
     "webpack-cli": "^3.3.2"
   }
 }

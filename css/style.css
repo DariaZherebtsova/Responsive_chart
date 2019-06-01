@@ -1,3 +1,16 @@
-div {
-    color: rgb(112, 34, 5);
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #95a5a6;
+  shape-rendering: crispEdges;
+}
+
+.line {
+  fill: none;
+  stroke: #2ecc71;
+  stroke-width: 1.5px;
+}
+
+.hello {
+    color: #2ecc71;
 }
