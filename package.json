@@ -1,0 +1,29 @@
+{
+  "name": "responsive_chart",
+  "version": "1.0.0",
+  "description": "Responsive_chart",
+  "main": "index.js",
+  "scripts": {
+    "watch": "webpack --watch",
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DariaZherebtsova/Responsive_chart.git"
+  },
+  "author": "Zherebtsova Daria",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DariaZherebtsova/Responsive_chart/issues"
+  },
+  "homepage": "https://github.com/DariaZherebtsova/Responsive_chart#readme",
+  "dependencies": {
+    "d3.js": "0.0.2-security",
+    "jquery": "^3.4.1",
+    "webpack": "^4.32.2"
+  },
+  "devDependencies": {
+    "webpack-cli": "^3.3.2"
+  }
+}
