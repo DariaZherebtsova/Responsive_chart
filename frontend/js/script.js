@@ -3,7 +3,9 @@ require('../../css/style.css');
 let breakPoint = 768;
 
 let Chart = (function (window, d3) {
-	let svg, x, y, xAxis, yAxis, dim, chartWrapper, line1, line2, path1, path2, margin = {}, width, height, touchScale, locator;
+	let svg, x, y, xAxis, yAxis, dim, chartWrapper, 
+	line1, line2, path1, path2, margin = {}, 
+	width, height, touchScale, locator, dots = [];
 	console.log("start5");
 	let data = [];
 	d3.json("http://localhost:8080/chart_data___.json").then((rawData) => {
@@ -21,12 +23,12 @@ let Chart = (function (window, d3) {
 		const y0Extent = d3.extent(data, function (d, i) { return d.y0 });
 		const y1Extent = d3.extent(data, function (d, i) { return d.y1 });
 		console.log('y0Extent', y0Extent);
-		const minValue = d3.min([y0Extent[0], y1Extent[0]]);
+		// const minValue = d3.min([y0Extent[0], y1Extent[0]]);
 		const maxValue = d3.max([y0Extent[1], y1Extent[1]]);
-		console.log([maxValue, minValue]);
+		// console.log([maxValue, minValue]);
 		//initialize scales  
 		x = d3.scaleTime().domain(xExtent);
-		y = d3.scaleLinear().domain([maxValue, minValue]);
+		y = d3.scaleLinear().domain([0, maxValue]);
 
 		//initialize axis
 		xAxis = d3.axisBottom();
@@ -49,29 +51,76 @@ let Chart = (function (window, d3) {
 		chartWrapper.append('g').classed('x axis', true);
 		chartWrapper.append('g').classed('y axis', true);
 
+		// добавляем отметки к точкам
+		dots = svg.selectAll(".dot ")
+		.data(data)
+		.enter().append("circle")
+		.style("stroke", "#FF7F0E")
+		.style("fill", "white")
+		.attr("class", "dot ")
+		.attr("r", 5);
+		console.log('***dots', dots);
+		dots.on('mouseover', onMouseOver);
+	
 		locator = chartWrapper.append('circle')
 			.style('display', 'none')
 			.attr('r', 10)
 			.attr('fill', '#f00');
 
-		chartWrapper.on('mousedown', onMouseDown);
+		// label = chartWrapper.append('text')
+		// 	.classed('label', true)
+		// 	.attr('x', 100)
+		// 	.attr('y', maxValue - 50)
+		// 	.text('select point')
+
+		locatorLine = chartWrapper.append('line')
+			.style('display', 'none')
+			.classed("locator-line", true)	
+
+		// chartWrapper.on('mouseover', onMouseOver);
 
 		//render the chart
 		render();
 	});
 
-	function onMouseDown() {
+	function onMouseOver() {
 		var xPos = d3.mouse(this)[0];
-		console.log('Click!', xPos);
-		var d = data[~~touchScale(xPos)];
+		console.log('xPos', xPos);
+		console.log('touchScale(xPos)', touchScale(xPos));
+		console.log('~~touchScale(xPos)', ~~touchScale(xPos));
+		var d = data[~~touchScale(xPos) - 1];
 		console.log('d', d);
-		console.log('d.x', new Date(d.x));
-		console.log('d.y', d.y0);
+		console.log('x', x(new Date(d.x)));
+		console.log('y', height);
 		console.log('locator', locator);
-		locator
-			.attr('cx', x(new Date(d.x)))
-			.attr('cy', y(d.y0))
+		locatorLine
+			.attr("x1", x(new Date(d.x)))
+			.attr("y1", 0)
+			.attr("x2", x(new Date(d.x)))
+			.attr("y2", height)
 			.style('display', 'block');
+
+		const textLabel = (new Date(d.x)).toDateString();
+		console.log('textLabel', textLabel);	
+		// label
+		// .attr('x', x(new Date(d.x)) + 15)
+		// .attr('y', y(d.y0))
+		// .style('text-anchor',	'start')
+		// .text(textLabel)
+		// .style('display', 'block');
+
+		const left = Math.ceil(x(new Date(d.x))) + 15;
+		console.log('left', left + 'px');
+		d3.select('.label')
+			.style('left', `${left}px`);
+		d3.select('.data')
+			.text(textLabel)
+		d3.select('.red')
+			.text(d.y0)	
+		d3.select('.green')
+			.text(d.y1)	
+
+
 	};
 
 	function render() {
@@ -97,7 +146,8 @@ let Chart = (function (window, d3) {
 			xAxis.scale(x).tickFormat(d3.timeFormat('%b %d'));
 		}
 		//yAxis = window.innerWidth < breakPoint ? d3.axisRight() : d3.axisLeft();
-		yAxis.scale(y);
+		yAxis.scale(y)
+			.ticks(6);
 
 		svg.select('.x.axis')
 			.attr('transform', 'translate(0,' + height + ')')
@@ -105,9 +155,24 @@ let Chart = (function (window, d3) {
 
 		svg.select('.y.axis')
 			.call(yAxis);
+  
+		// рисуем горизонтальные линии координатной сетки
+		const gridLine = svg.selectAll("g.y.axis g.tick")
+		.append("line")
+		.classed("grid-line", true)
+		.attr("x1", 0)
+		.attr("y1", 0)
+		.attr("x2", width)
+		.attr("y2", 0);	
+		console.log('***gridLine', gridLine);
 
 		path1.attr('d', line1);
 		path2.attr('d', line2);
+
+		dots
+		.attr('cx', (function (d) { return x(new Date(d.x))+margin.left }))
+		.attr('cy', (function (d) { return y(d.y0)+margin.top }));
+		
 	}
 
 	function updateDimensions(winWidth) {

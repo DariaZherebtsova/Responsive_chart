@@ -8,6 +8,25 @@
   stroke: #95a5a6;
   shape-rendering: crispEdges;
 }
+.grid-line {
+  stroke: #000;
+  stroke-opacity: 0.2;
+}
+.locator-line {
+  stroke: #000;
+  stroke-opacity: 0.2;
+}
+.y.axis path.domain {
+  opacity: 0;
+}
+.x.axis path.domain {
+  opacity: 0;
+}
+
+.label {
+  box-shadow: 0 0 5px rgba(0,0,0,0.5); 
+  padding: 15px;
+}
 
 .line1 {
   fill: none;
@@ -20,6 +39,28 @@
   stroke-width: 1.5px;
 }
 
-.hello {
-    color: #2ecc71;
+.dot {
+  opacity: 0;
+}
+/* .dot:hover {
+  opacity: 1;
+} */
+
+.label {
+    position: absolute;
+    top: 50px;
+    left: 100px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5); 
+    padding: 10px;
+    color: #282928;
+    background-color: aliceblue;
+}
+.values {
+  text-align: center;
+}
+.red {
+  color: #d62e2e;
+}
+.green {
+  color: #2ecc71;
 }
