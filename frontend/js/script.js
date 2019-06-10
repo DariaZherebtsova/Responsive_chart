@@ -1,7 +1,7 @@
 require('../../css/style.css');
 
-// const url = 'https://dariazherebtsova.github.io/Responsive_chart/chart_data___.json';
-const url = 'http://localhost:8080/chart_data___.json';
+const url = 'https://dariazherebtsova.github.io/Responsive_chart/chart_data___.json';
+// const url = 'http://localhost:8080/chart_data___.json';
 let breakPoint = 768;
 
 let Chart = (function (window, d3) {
