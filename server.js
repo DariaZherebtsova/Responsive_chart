@@ -11,7 +11,7 @@ var staticSiteOptions = {
 
 // Запуск сайта:
 express().use(express.static(
-   path.join(__dirname, 'public'),
+   path.join(__dirname, '/'),
    staticSiteOptions
 )).listen(staticSiteOptions.portnum);
 
