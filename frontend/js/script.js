@@ -11,7 +11,8 @@ let Chart = (function (window, d3) {
 	let data = [];
 	let showLabel = false;
 
-	d3.json(url).then((rawData) => {
+	// d3.json(url).then((rawData) => {
+	getData(url).then((rawData) => {	
 		const numElements = 20;
 		for (let i = 1; i < numElements; i++) {
 			data.push({ x: rawData[0].columns[0][i], y0: rawData[0].columns[1][i], y1: rawData[0].columns[2][i] })
@@ -62,6 +63,12 @@ let Chart = (function (window, d3) {
 		//render the chart
 		render();
 	});
+
+	function getData(url) {
+		return fetch(url)
+        	.then((response) => response.json())
+        	.then((books) => books)
+	};
 
 	function onMouseOver() {
 		var xPos = d3.mouse(this)[0];
