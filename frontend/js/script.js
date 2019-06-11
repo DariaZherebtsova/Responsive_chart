@@ -7,7 +7,7 @@ let breakPoint = 768;
 let Chart = (function (window, d3) {
 	let svg, x, y, xAxis, yAxis, dim, chartWrapper, 
 	line1, line2, path1, path2, margin = {}, 
-	width, height, touchScale, locator, dots = [];
+	width, height, touchScale, locator, dots1 = [], dots2 = [];
 	let data = [];
 	let showLabel = false;
 
@@ -47,14 +47,23 @@ let Chart = (function (window, d3) {
 		chartWrapper.append('g').classed('x axis', true);
 		chartWrapper.append('g').classed('y axis', true);
 
-		dots = svg.selectAll(".dot ")
+		dots1 = svg.selectAll(".dot.index1")
 		.data(data)
 		.enter().append("circle")
 		.style("stroke", "#FF7F0E")
 		.style("fill", "white")
 		.attr("class", "dot ")
 		.attr("r", 5);
-		dots.on('mouseover', onMouseOver);
+		dots1.on('mouseover', onMouseOver);
+
+		dots2 = svg.selectAll(".dot.index2")
+		.data(data)
+		.enter().append("circle")
+		.style("stroke", "#FF7F0E")
+		.style("fill", "white")
+		.attr("class", "dot ")
+		.attr("r", 5);
+		dots2.on('mouseover', onMouseOver);
 
 		locatorLine = chartWrapper.append('line')
 			.style('display', 'none')
@@ -72,23 +81,27 @@ let Chart = (function (window, d3) {
 
 	function onMouseOver() {
 		var xPos = d3.mouse(this)[0];
-		var d = data[~~touchScale(xPos) - 1];
+		var d = data[~~touchScale(xPos)];
 		locatorLine
 			.attr("x1", x(new Date(d.x)))
 			.attr("y1", 0)
 			.attr("x2", x(new Date(d.x)))
 			.attr("y2", height)
 			.style('display', 'block');
+
 		showLabel = true;
 		const textLabel = (new Date(d.x)).toDateString();
 		const left = Math.ceil(x(new Date(d.x))) + 15;
 		d3.select('.label')
 			.style('left', `${left}px`)
 			.style('opacity', 1)
+
 		d3.select('.data')
 			.text(textLabel)
+
 		d3.select('.green')
 			.text(d.y0)	
+			
 		d3.select('.red')
 			.text(d.y1)	
 
@@ -144,9 +157,13 @@ let Chart = (function (window, d3) {
 		path1.attr('d', line1);
 		path2.attr('d', line2);
 
-		dots
+		dots1
 		.attr('cx', (function (d) { return x(new Date(d.x))+margin.left }))
 		.attr('cy', (function (d) { return y(d.y0)+margin.top }));
+
+		dots2
+		.attr('cx', (function (d) { return x(new Date(d.x))+margin.left }))
+		.attr('cy', (function (d) { return y(d.y1)+margin.top }));
 		
 	}
 
