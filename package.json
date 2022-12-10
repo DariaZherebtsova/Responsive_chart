@@ -20,7 +20,7 @@
   "homepage": "https://github.com/DariaZherebtsova/Responsive_chart#readme",
   "dependencies": {
     "d3": "^5.9.2",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "jquery": "^3.4.1",
     "webpack": "^4.32.2"
   },
